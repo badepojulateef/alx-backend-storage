@@ -1,17 +1,19 @@
-DELIMITER $$;
-
--- Create a SafeDiv function that performs safe division.
--- This function takes two integer arguments, 'a' and 'b', and returns the result of 'a / b' or 0 if 'b' is equal to 0.
-CREATE FUNCTION SafeDiv(a INT, b INT)
-RETURNS DECIMAL(10,4)
+-- Script that creates a function SafeDiv that divides
+-- (and returns) the first by the second number or returns
+-- 0 if the second number is equal to 0.
+DELIMITER $$ ;
+CREATE FUNCTION SafeDiv(
+	a INT,
+	b INT
+)
+RETURNS FLOAT
+DETERMINISTIC
 BEGIN
-    DECLARE result DECIMAL(10,4);
-    IF b = 0 THEN
-        SET result = 0;
-    ELSE
-        SET result = a / b;
-    END IF;
-    RETURN result;
-END$$;
-
+	DECLARE result FLOAT;
+	IF b = 0 THEN
+		RETURN 0;
+        END IF;
+        SET result = (a * 1.0) / b;
+        RETURN result;
+END;$$
 DELIMITER ;
