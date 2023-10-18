@@ -19,4 +19,4 @@ def schools_by_topic(mongo_collection, topic):
     :return: A cursor pointing to the documents that match the specified topic.
     :rtype: pymongo.cursor.Cursor
     """
-    return mongo_collection.find({"topics": topic})
+    return mongo_collection.find({ "topics": topic })
