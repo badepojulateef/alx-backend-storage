@@ -21,7 +21,7 @@ The output of your script must be exactly the same as the example
 from pymongo import Mongoclient
 
 
-def nginx_log_stats(mongo_collection):
+def nginx_log_stats(mongo_collection, option=None):
     """
     Provides statistics about Nginx logs stored in a MongoDB collection.
 
@@ -32,17 +32,20 @@ def nginx_log_stats(mongo_collection):
     :param mongo_collection: The MongoDB collection containing Nginx logs.
     :type mongo_collection: pymongo.collection.Collection
     """
-    print(f"{mongo_collection.estimated_document_count()} logs")
+    items = {}
+    if option:
+        value = mongo_collection.count_documents(
+            {"method": {"$regex": option}})
+        print(f"\tmethod {option}: {value}")
+        return
 
+    res = mongo_collection.count_documents(items)
+    print(f"{result} logs")
     print("Methods:")
-    for method in ["GET", "POST", "PUT", "PATCH", "DELETE"]:
-        counter = mongo_collection.count_documents({"method": method})
-        print(f"\tmethod {method}: {counter}")
-
-    num_of_gets = mongo_collection.count_documents(
-                {"method": "GET", "path": "/status"}
-            )
-    print(f"{number_of_gets} status check")
+    for method in METHODS:
+        nginx_log_stats(nginx_collection, method)
+    status_check = mongo_collection.count_documents({"path": "/status"})
+    print(f"{status_check} status check")
 
 
 if __name__ == "__main__":
