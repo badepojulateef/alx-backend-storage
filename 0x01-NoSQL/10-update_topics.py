@@ -22,7 +22,7 @@ def update_topics(mongo_collection, name, topics):
     the result of the update operation.
     :rtype: pymongo.results.UpdateResult
     """
-    return mongo_collection.updateMany(
+    return mongo_collection.update_many(
         {
             "name": name
         },
@@ -31,4 +31,4 @@ def update_topics(mongo_collection, name, topics):
                 "topics": topics
                }
         }
-     )
+  )
